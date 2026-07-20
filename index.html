@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade with Krishna Crypto</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #00ff6a;
+    --green-glow: rgba(0,255,106,0.18);
+    --gold: #ffd75e;
+    --white: #f0f4ff;
+    --muted: #7a8aaa;
+    --card-bg: rgba(4,8,15,0.72);
+    --border: rgba(0,255,106,0.18);
+  }
+
+  html, body {
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Background image with dark overlay ── */
+  .bg-layer {
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3RvY2slMjB0cmFkaW5nfGVufDB8fDB8fHww');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .bg-layer::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(4,8,15,0.82) 0%, rgba(4,8,15,0.75) 50%, rgba(4,8,15,0.92) 100%);
+  }
+
+  /* ── Grid overlay ── */
+  .grid-layer {
+    position: fixed; inset: 0; z-index: 1;
+    background:
+      linear-gradient(rgba(0,255,106,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,106,0.03) 1px, transparent 1px);
+    background-size: 44px 44px;
+    pointer-events: none;
+  }
+
+  .wrap {
+    position: relative; z-index: 2;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    width: 100%;
+    display: flex; justify-content: center; align-items: center;
+    padding: 18px 0 10px;
+    gap: 10px;
+  }
+  .topbar-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  .topbar-label { font-size: 11px; color: var(--green); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+
+  @keyframes pulse {
+    0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(0,255,106,0.5); }
+    50% { opacity:0.7; box-shadow: 0 0 0 6px rgba(0,255,106,0); }
+  }
+
+  /* ── Logo ── */
+  .logo-ring {
+    margin-top: 24px;
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    border: 2.5px solid var(--green);
+    box-shadow: 0 0 28px var(--green-glow), inset 0 0 18px rgba(0,255,106,0.08);
+    overflow: hidden;
+    background: #0a1220;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-ring img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+  /* ── Brand name ── */
+  .brand {
+    margin-top: 18px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(20px, 5vw, 28px);
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-align: center;
+    color: var(--white);
+    line-height: 1.2;
+  }
+  .brand span { color: var(--green); }
+
+  /* ── Counter ── */
+  .counter-wrap {
+    margin-top: 26px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .counter-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(64px, 18vw, 96px);
+    font-weight: 900;
+    color: var(--green);
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(0,255,106,0.5);
+    letter-spacing: -2px;
+  }
+  .counter-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* ── Features card ── */
+  .features {
+    margin-top: 28px;
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px 24px;
+    backdrop-filter: blur(12px);
+  }
+  .features-title {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,215,94,0.12);
+  }
+  .feat-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    margin-bottom: 14px;
+  }
+  .feat-row:last-child { margin-bottom: 0; }
+  .feat-icon {
+    width: 32px; height: 32px; flex-shrink: 0;
+    background: rgba(0,255,106,0.08);
+    border: 1px solid rgba(0,255,106,0.2);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+  }
+  .feat-text { font-size: 14px; color: var(--white); line-height: 1.45; padding-top: 5px; }
+  .feat-text strong { color: var(--green); font-weight: 700; }
+
+  /* ── Score badge ── */
+  .score-badge {
+    margin-top: 20px;
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, rgba(0,255,106,0.12), rgba(0,255,106,0.04));
+    border: 1px solid rgba(0,255,106,0.3);
+    border-radius: 999px;
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(8px);
+  }
+
+  /* ── CTA button ── */
+  .cta-wrap { margin-top: 28px; width: 100%; }
+  .cta-btn {
+    display: block;
+    width: 100%;
+    background: var(--green);
+    color: #040c00;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-align: center;
+    padding: 20px 20px;
+    border-radius: 14px;
+    text-decoration: none;
+    text-transform: uppercase;
+    box-shadow: 0 0 32px rgba(0,255,106,0.35), 0 4px 20px rgba(0,0,0,0.4);
+    transition: transform 0.15s, box-shadow 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-btn::before {
+    content: '';
+    position: absolute; top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+    animation: shimmer 2.8s infinite;
+  }
+  @keyframes shimmer {
+    0% { left: -100%; }
+    60%,100% { left: 140%; }
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 0 48px rgba(0,255,106,0.5), 0 6px 28px rgba(0,0,0,0.5); }
+  .cta-btn:active { transform: translateY(0); }
+  .cta-sub {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+
+  /* ── Timer countdown ── */
+  .timer-bar {
+    margin-top: 10px;
+    width: 100%;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  #countdown {
+    color: var(--green);
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 14px rgba(0,255,106,0.5);
+  }
+  .timer-progress-wrap {
+    margin-top: 8px;
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  #timerBar {
+    height: 100%;
+    background: var(--green);
+    border-radius: 99px;
+    width: 100%;
+    transition: width 1s linear, background 1s;
+    box-shadow: 0 0 8px rgba(0,255,106,0.5);
+  }
+
+  /* ── Redirect overlay ── */
+  .redirect-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(4,8,15,0.96);
+    flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 30px;
+  }
+  .redirect-overlay.show { display: flex; }
+  .redirect-icon { font-size: 60px; margin-bottom: 20px; animation: bounce 0.8s infinite alternate; }
+  @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-12px); } }
+  .redirect-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--green);
+    margin-bottom: 10px;
+  }
+  .redirect-sub { font-size: 15px; color: var(--muted); margin-bottom: 28px; }
+  .redirect-btn {
+    display: inline-block;
+    background: var(--green);
+    color: #040c00;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    padding: 16px 36px;
+    border-radius: 12px;
+    text-decoration: none;
+    text-transform: uppercase;
+    box-shadow: 0 0 28px rgba(0,255,106,0.4);
+    animation: pulse-btn 1.5s infinite;
+  }
+  @keyframes pulse-btn {
+    0%,100% { box-shadow: 0 0 28px rgba(0,255,106,0.4); }
+    50% { box-shadow: 0 0 50px rgba(0,255,106,0.7); }
+  }
+
+  /* ── Ads credit ── */
+  .ads-credit {
+    margin-top: 28px;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,100,0,0.08);
+    border: 1px solid rgba(255,100,0,0.2);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 12px;
+    color: #ff8855;
+    backdrop-filter: blur(8px);
+  }
+  .ads-credit a { color: #ff8855; font-weight: 700; text-decoration: none; }
+  .ads-credit a:hover { text-decoration: underline; }
+
+  .divider {
+    margin: 28px 0 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,255,106,0.15), transparent);
+  }
+  .footer-links {
+    margin-top: 18px;
+    display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+  }
+  .footer-links a {
+    font-size: 12px; color: var(--muted); text-decoration: none; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--green); }
+  .disclaimer {
+    margin-top: 14px;
+    font-size: 11px;
+    color: #4a5a72;
+    text-align: center;
+    line-height: 1.7;
+    padding: 0 4px 24px;
+  }
+</style>
+</head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1044251271878512');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1044251271878512&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+  
+<body>
+
+<!-- BG layers -->
+<div class="bg-layer"></div>
+<div class="grid-layer"></div>
+
+<!-- Auto-redirect overlay -->
+<div class="redirect-overlay" id="redirectOverlay">
+  <div class="redirect-icon">🚀</div>
+  <div class="redirect-title">Taking You to Telegram!</div>
+  <div class="redirect-sub">Redirecting you to the free channel now...<br>Click below if it doesn't open automatically.</div>
+  <a class="redirect-btn" href="https://telegram.me/+zXdFY5zuFRozZDY1" target="_blank" rel="noopener">
+    Open Telegram Channel
+  </a>
+</div>
+
+<div class="wrap">
+
+  <!-- Live indicator -->
+  <div class="topbar">
+    <div class="topbar-dot"></div>
+    <div class="topbar-label">Live Market Insights</div>
+    <div class="topbar-dot"></div>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo-ring">
+    <img src="https://forexwithrr.site/wp-content/uploads/2026/04/rrlogo.jpg" alt="Krishna Logo">
+  </div>
+
+  <!-- Brand name -->
+  <div class="brand">Trade with <span>Krisshna Crypto</span></div>
+
+  <!-- Members counter -->
+  <div class="counter-wrap">
+    <div class="counter-num" id="memberCount">0</div>
+    <div class="counter-label">Active Members Today</div>
+  </div>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="features-title">🏆 Today's Market Results</div>
+    <div class="feat-row">
+      <div class="feat-icon">📊</div>
+      <div class="feat-text"><strong>SMC, Gold, Forex & BTC Setups</strong> — Daily high-accuracy trade ideas</div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-icon">💡</div>
+      <div class="feat-text"><strong>Smart Money Strategies & Tips</strong> — Institutional-grade analysis</div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-icon">🎯</div>
+      <div class="feat-text"><strong>Expert Trading Insights — Daily</strong> — 5/5 expert calls delivered</div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-icon">🛡️</div>
+      <div class="feat-text"><strong>Risk Management Guidance</strong> — Protect your capital every session</div>
+    </div>
+  </div>
+
+  <!-- Score badge -->
+  <div class="score-badge">
+    ✅ &nbsp;5/5 Expert Trades Hit Today
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-wrap">
+    <a class="cta-btn" href="https://telegram.me/+zXdFY5zuFRozZDY1" target="_blank" rel="noopener">
+      🚀 Join Free Channel
+    </a>
+    <div class="cta-sub">Free access ends soon &nbsp;·&nbsp; Seats filling fast</div>
+  </div>
+
+  <!-- Countdown timer -->
+  <div class="timer-bar">
+    ⏳ Free joining ends in: &nbsp;<span id="countdown">00:10</span>
+  </div>
+  <div class="timer-progress-wrap">
+    <div id="timerBar"></div>
+  </div>
+
+  <!-- Ads credit -->
+  <div class="ads-credit">
+    📢 Ads by <a href="https://wa.link/y2913g" target="_blank" rel="noopener">Metamind Agency — Contact for Ads</a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="footer-links">
+    <a href="https://forexmind.online/terms-conditions/" target="_blank">Terms</a>
+    <a href="https://forexmind.online/disclaimer/" target="_blank">Disclaimer</a>
+    <a href="https://forexmind.online/privacy-policy/" target="_blank">Privacy</a>
+  </div>
+
+  <p class="disclaimer">
+    For educational purposes only. Trading involves risk. Capital may be at risk.<br>
+    This site is not part of Facebook™ or Meta Platforms Inc. and is not endorsed by Facebook™.
+  </p>
+
+</div>
+
+<script>
+  const TELEGRAM_URL = 'https://telegram.me/+axMG6rdTWQ01NmVl';
+  const FIXED_COUNT = 6 814 subscribers;
+
+  // ── Animated member counter up to 5,964 ──
+  let current = 0;
+  const el = document.getElementById('memberCount');
+  const duration = 1800; // ms
+  const steps = 60;
+  const stepVal = FIXED_COUNT / steps;
+  let step = 0;
+  const counterInterval = setInterval(() => {
+    step++;
+    current = Math.min(Math.round(stepVal * step), FIXED_COUNT);
+    el.textContent = current.toLocaleString();
+    if (current >= FIXED_COUNT) clearInterval(counterInterval);
+  }, duration / steps);
+
+  // ── 10-second countdown then redirect ──
+  const TOTAL = 10;
+  let secs = TOTAL;
+  const cdEl = document.getElementById('countdown');
+  const barEl = document.getElementById('timerBar');
+  const overlay = document.getElementById('redirectOverlay');
+
+  function updateTimer() {
+    cdEl.textContent = '00:' + String(secs).padStart(2, '0');
+    const pct = (secs / TOTAL) * 100;
+    barEl.style.width = pct + '%';
+    // Color shifts red as time runs out
+    if (secs <= 3) {
+      barEl.style.background = '#ff4444';
+      barEl.style.boxShadow = '0 0 8px rgba(255,68,68,0.6)';
+      cdEl.style.color = '#ff4444';
+      cdEl.style.textShadow = '0 0 14px rgba(255,68,68,0.5)';
+    } else if (secs <= 6) {
+      barEl.style.background = '#ffbb00';
+      cdEl.style.color = '#ffbb00';
+    }
+
+    if (secs <= 0) {
+      clearInterval(timerInterval);
+      // Show overlay + open telegram
+      overlay.classList.add('show');
+      window.open(TELEGRAM_URL, '_blank');
+    } else {
+      secs--;
+    }
+  }
+
+  updateTimer();
+  const timerInterval = setInterval(updateTimer, 1000);
+</script>
+</body>
+</html>
